@@ -130,6 +130,111 @@ enquiryForm.addEventListener('submit', (e) => {
 });
 
 /* =========================================================
-   4. FOOTER YEAR
+   4. NEXT AVAILABLE APPOINTMENT SLOT (hero trust chip)
+   ========================================================= */
+function nextAvailableSlot() {
+  const slot = new Date();
+  slot.setHours(9, 40, 0, 0);
+
+  // Push to tomorrow, then skip forward over weekends.
+  slot.setDate(slot.getDate() + 1);
+  while (slot.getDay() === 0 || slot.getDay() === 6) {
+    slot.setDate(slot.getDate() + 1);
+  }
+
+  const formatted = slot.toLocaleDateString('en-US', { weekday: 'long' }) +
+    ', ' + slot.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+  document.getElementById('nextSlot').textContent = formatted;
+}
+
+nextAvailableSlot();
+
+/* =========================================================
+   5. LEAD MAGNET: FAMILY WELLNESS CHECKLIST
+   ========================================================= */
+const checklistForm = document.getElementById('checklistForm');
+const checklistSuccess = document.getElementById('checklistSuccess');
+const checklistEmail = document.getElementById('checklistEmail');
+const checklistEmailError = document.getElementById('checklistEmailError');
+
+const CHECKLIST_CONTENT = `WILLOWBROOK FAMILY CLINIC
+The Family Wellness Checklist
+
+AGE-BY-AGE SCREENING & VACCINATION SCHEDULE
+- Infants (0-1yr): Well-baby visits at 2, 4, 6, 9, and 12 months
+- Children (1-12yr): Annual checkup + vision/hearing screen; vaccines per CDC schedule
+- Teens (13-18yr): Annual checkup; sports physicals as needed
+- Adults (19-64yr): Checkup every 1-2 years; blood pressure and cholesterol screening
+- Adults (65+): Annual checkup; bone density and cardiovascular screening
+
+WHEN A SYMPTOM WARRANTS A SAME-WEEK VISIT
+- Fever lasting more than 3 days
+- Persistent pain that disrupts sleep or daily activity
+- Any new lump, rash, or symptom that is worsening
+- Shortness of breath with everyday activity
+
+QUESTIONS WORTH ASKING AT YOUR NEXT CHECKUP
+- Are my vaccinations up to date?
+- What screenings make sense for my age and family history?
+- Are there any medication interactions I should know about?
+- What's one habit I could change that would matter most?
+
+Willowbrook Family Clinic - 128 Maple Street, Springfield
+(555) 234-7890 - hello@willowbrookclinic.example
+`;
+
+function validateChecklistEmail() {
+  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(checklistEmail.value.trim());
+
+  if (isValid) {
+    checklistEmail.classList.remove('is-invalid');
+    checklistEmailError.textContent = '';
+  } else {
+    checklistEmail.classList.add('is-invalid');
+    checklistEmailError.textContent = 'Please enter a valid email address.';
+  }
+
+  return isValid;
+}
+
+checklistEmail.addEventListener('blur', validateChecklistEmail);
+
+checklistForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  checklistSuccess.hidden = true;
+
+  if (!validateChecklistEmail()) {
+    checklistEmail.focus();
+    return;
+  }
+
+  // ---------------------------------------------------------
+  // TODO: Replace this with a real API call to an email service, e.g.:
+  // fetch('/api/leads', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ email: checklistEmail.value.trim(), source: 'family-wellness-checklist' }),
+  // });
+  // ---------------------------------------------------------
+  console.log('Checklist requested by:', checklistEmail.value.trim());
+
+  const blob = new Blob([CHECKLIST_CONTENT], { type: 'text/plain' });
+  const downloadUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = downloadUrl;
+  link.download = 'willowbrook-family-wellness-checklist.txt';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(downloadUrl);
+
+  checklistSuccess.hidden = false;
+  checklistForm.reset();
+});
+
+/* =========================================================
+   6. FOOTER YEAR
    ========================================================= */
 document.getElementById('year').textContent = new Date().getFullYear();

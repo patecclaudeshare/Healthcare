@@ -2,17 +2,23 @@
    0. CUSTOM PROPERTIES / RESET
    ========================================================= */
 :root {
+  --color-ink: #12262d;
   --color-primary: #0f6e8c;
   --color-primary-dark: #0a4d63;
+  --color-primary-deep: #072f3d;
   --color-teal: #14b8a6;
+  --color-sage: #6ea37a;
   --color-accent: #ff8a65;
   --color-accent-dark: #f2734d;
+  --color-gold: #f2b705;
   --color-bg: #ffffff;
   --color-bg-alt: #f4f9fb;
+  --color-paper: #fbf9f4;
   --color-text: #1e2a32;
   --color-text-muted: #566b76;
   --color-border: #dfeaee;
 
+  --font-display: 'Fraunces', Georgia, serif;
   --font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --container-width: 1160px;
@@ -40,9 +46,10 @@ body {
 }
 
 h1, h2, h3 {
-  line-height: 1.2;
+  font-family: var(--font-display);
+  line-height: 1.15;
   margin: 0 0 0.5em;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 p {
@@ -157,8 +164,9 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 800;
-  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
   color: var(--color-primary-dark);
 }
 
@@ -275,12 +283,41 @@ button {
    3. HERO SECTION
    ========================================================= */
 .hero {
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 55%, var(--color-teal) 100%);
+  position: relative;
+  background: linear-gradient(135deg, var(--color-primary-deep) 0%, var(--color-primary-dark) 45%, var(--color-teal) 100%);
   color: #ffffff;
   padding: 72px 0 56px;
+  overflow: hidden;
+}
+
+/* The Willowbrook Pulse — signature heartbeat motif, draws in on load */
+.hero__pulse {
+  position: absolute;
+  inset: auto 0 -10px 0;
+  width: 100%;
+  height: 90px;
+  opacity: 0.22;
+}
+
+.hero__pulse path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation: pulse-draw 2.4s ease-out 0.3s forwards;
+}
+
+@keyframes pulse-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .hero__content {
+  position: relative;
   max-width: 720px;
 }
 
@@ -294,7 +331,7 @@ button {
 }
 
 .hero__headline {
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
   margin-bottom: 16px;
 }
 
@@ -355,6 +392,10 @@ button {
 }
 
 .section-heading__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -363,8 +404,22 @@ button {
   margin-bottom: 8px;
 }
 
+.section-heading--left .section-heading__eyebrow {
+  justify-content: flex-start;
+}
+
+/* Small recurring pulse glyph — echoes the hero's signature heartbeat line */
+.pulse-mark {
+  display: inline-block;
+  width: 22px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 10'%3E%3Cpath d='M0 5h6l1.6-4 3 8 1.6-4H22' fill='none' stroke='%230f6e8c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .section-heading h2 {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-size: clamp(1.85rem, 3vw, 2.4rem);
   color: var(--color-primary-dark);
 }
 
@@ -374,7 +429,58 @@ button {
 }
 
 /* =========================================================
-   5. SERVICES SECTION
+   5. WHY / VALUE PROPS SECTION
+   ========================================================= */
+.why {
+  padding: 56px 0;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.why__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.why-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.why-card__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-alt);
+  color: var(--color-primary);
+}
+
+.why-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  color: var(--color-ink);
+}
+
+.why-card p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .why__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =========================================================
+   6. SERVICES SECTION
    ========================================================= */
 .services {
   padding: 80px 0;
@@ -430,11 +536,236 @@ button {
 }
 
 /* =========================================================
-   6. TESTIMONIALS SECTION
+   7. CARE JOURNEY SECTION
+   ========================================================= */
+.journey {
+  padding: 80px 0;
+  background: var(--color-bg-alt);
+}
+
+.journey__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  counter-reset: none;
+}
+
+.journey__step {
+  position: relative;
+  padding-left: 64px;
+}
+
+.journey__number {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-teal);
+  width: 48px;
+  line-height: 1;
+}
+
+.journey__step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: var(--color-ink);
+}
+
+.journey__step p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .journey__list {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .journey__list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .journey__step {
+    padding-left: 0;
+    padding-top: 56px;
+  }
+
+  .journey__number {
+    top: 0;
+    left: 0;
+  }
+}
+
+/* =========================================================
+   8. LEAD MAGNET SECTION
+   ========================================================= */
+.lead-magnet {
+  padding: 72px 0;
+  background: var(--color-paper);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lead-magnet__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.lead-magnet__copy h2 {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  color: var(--color-primary-dark);
+}
+
+.lead-magnet__points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.lead-magnet__points li {
+  position: relative;
+  padding-left: 26px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.lead-magnet__points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-sage);
+}
+
+.lead-magnet__form {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.lead-magnet__form label {
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.lead-magnet__form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lead-magnet__form-row input {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.lead-magnet__form-row input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(15, 110, 140, 0.15);
+  outline: none;
+}
+
+.lead-magnet__form-row input.is-invalid {
+  border-color: #d9453a;
+}
+
+.lead-magnet__form-row .btn {
+  white-space: nowrap;
+}
+
+.lead-magnet__fineprint {
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 640px) {
+  .lead-magnet__form-row {
+    flex-direction: row;
+  }
+
+  .lead-magnet__form-row input {
+    flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lead-magnet__inner {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+/* =========================================================
+   9. TESTIMONIALS SECTION
    ========================================================= */
 .testimonials {
   padding: 80px 0;
-  background: var(--color-bg-alt);
+  background: var(--color-bg);
+}
+
+.testimonial-featured {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  text-align: center;
+  padding: 0;
+}
+
+.testimonial-featured p {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  font-weight: 500;
+  color: var(--color-ink);
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+.testimonial-featured p::before {
+  content: '\201C';
+}
+
+.testimonial-featured p::after {
+  content: '\201D';
+}
+
+.testimonial-featured footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.testimonial-featured cite {
+  font-style: normal;
+  font-weight: 700;
+  display: block;
+}
+
+.testimonial-featured__rating {
+  color: var(--color-gold);
+  letter-spacing: 2px;
+  font-size: 0.9rem;
 }
 
 .testimonials__grid {
@@ -444,10 +775,9 @@ button {
 }
 
 .testimonial-card {
-  background: #ffffff;
+  background: var(--color-bg-alt);
   border-radius: var(--radius-lg);
   padding: 28px 24px;
-  box-shadow: var(--shadow-soft);
   transition: transform var(--transition-base);
 }
 
@@ -493,7 +823,7 @@ button {
 }
 
 .testimonial-card__rating {
-  color: #f5a623;
+  color: var(--color-gold);
   letter-spacing: 2px;
   font-size: 0.9rem;
   margin-bottom: 0;
@@ -507,18 +837,74 @@ button {
 
 @media (min-width: 640px) {
   .testimonials__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .testimonials__grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* =========================================================
-   7. ENQUIRY FORM SECTION
+   10. FAQ SECTION
+   ========================================================= */
+.faq {
+  padding: 80px 0;
+  background: var(--color-bg-alt);
+}
+
+.faq__list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq__item {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 4px 20px;
+}
+
+.faq__item + .faq__item {
+  margin-top: 0;
+}
+
+.faq__item summary {
+  cursor: pointer;
+  padding: 16px 0;
+  font-weight: 600;
+  color: var(--color-ink);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary::after {
+  content: '+';
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  transition: transform var(--transition-base);
+}
+
+.faq__item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq__item p {
+  color: var(--color-text-muted);
+  padding-bottom: 18px;
+  margin: 0;
+}
+
+/* =========================================================
+   11. ENQUIRY FORM SECTION
    ========================================================= */
 .enquiry {
   padding: 80px 0;
@@ -631,10 +1017,10 @@ button {
 }
 
 /* =========================================================
-   8. FOOTER
+   12. FOOTER
    ========================================================= */
 .footer {
-  background: var(--color-primary-dark);
+  background: var(--color-primary-deep);
   color: rgba(255, 255, 255, 0.85);
   padding: 56px 0 0;
 }
@@ -648,8 +1034,9 @@ button {
 
 .footer__logo {
   color: #ffffff;
-  font-weight: 800;
-  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
   margin-bottom: 6px;
 }
 
@@ -719,7 +1106,7 @@ button {
 }
 
 /* =========================================================
-   9. SCROLL FADE-IN ANIMATION
+   13. SCROLL FADE-IN ANIMATION
    ========================================================= */
 .fade-in {
   opacity: 0;
@@ -741,5 +1128,10 @@ button {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .hero__pulse path {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }
