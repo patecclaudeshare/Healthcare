@@ -1,0 +1,19 @@
+# Personal working notes / scratch files (not part of the site)
+Assessment.docx
+File structure.xlsx
+Github steps.xlsx
+Claude code - project vs users level.xlsx
+~$*.docx
+~$*.xlsx
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+*credentials*
+*.p12
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
