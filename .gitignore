@@ -17,3 +17,6 @@ Claude code - project vs users level.xlsx
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+# Playwright MCP raw output (screenshots we keep are copied into assets/)
+.playwright-mcp/

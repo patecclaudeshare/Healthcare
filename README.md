@@ -4,6 +4,8 @@ A static, single-page marketing site for a healthcare clinic — hero section, s
 
 **Live site:** https://patecclaudeshare.github.io/Healthcare/
 
+![Screenshot of the Willowbrook Family Clinic site](assets/screenshot.png)
+
 ## Tech stack
 
 No framework, no build step, no package manager — just three hand-written files:
