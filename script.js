@@ -41,6 +41,11 @@ fadeElements.forEach((el) => fadeInObserver.observe(el));
    ========================================================= */
 const enquiryForm = document.getElementById('enquiryForm');
 const formSuccess = document.getElementById('formSuccess');
+const formError = document.getElementById('formError');
+const formSubmitBtn = document.getElementById('formSubmitBtn');
+
+// Web3Forms access key — get yours free at https://web3forms.com/ (no account needed)
+const WEB3FORMS_ACCESS_KEY = '383258';
 
 const fields = {
   fullName: {
@@ -91,10 +96,11 @@ Object.keys(fields).forEach((key) => {
   fields[key].input.addEventListener('blur', () => validateField(key));
 });
 
-enquiryForm.addEventListener('submit', (e) => {
+enquiryForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   formSuccess.hidden = true;
+  formError.hidden = true;
 
   const results = Object.keys(fields).map((key) => validateField(key));
   const allValid = results.every(Boolean);
@@ -114,19 +120,41 @@ enquiryForm.addEventListener('submit', (e) => {
     message: document.getElementById('message').value.trim(),
   };
 
-  // ---------------------------------------------------------
-  // TODO: Replace this with a real API call, e.g.:
-  // fetch('/api/appointments', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(formData),
-  // });
-  // ---------------------------------------------------------
-  console.log('Appointment request submitted:', formData);
+  formSubmitBtn.disabled = true;
+  formSubmitBtn.textContent = 'Sending...';
 
-  formSuccess.hidden = false;
-  enquiryForm.reset();
-  Object.keys(fields).forEach((key) => clearFieldError(fields[key]));
+  try {
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: 'New appointment request — Willowbrook Clinic',
+        from_name: formData.fullName,
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        preferred_date: formData.preferredDate,
+        message: formData.message,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Submission failed');
+    }
+
+    formSuccess.hidden = false;
+    enquiryForm.reset();
+    Object.keys(fields).forEach((key) => clearFieldError(fields[key]));
+  } catch (err) {
+    console.error('Appointment request failed:', err);
+    formError.hidden = false;
+  } finally {
+    formSubmitBtn.disabled = false;
+    formSubmitBtn.textContent = 'Submit Request';
+  }
 });
 
 /* =========================================================
@@ -238,3 +266,47 @@ checklistForm.addEventListener('submit', (e) => {
    6. FOOTER YEAR
    ========================================================= */
 document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   7. FLOATING WHATSAPP WIDGET
+   ========================================================= */
+const whatsappToggle = document.getElementById('whatsappToggle');
+const whatsappPanel = document.getElementById('whatsappPanel');
+const whatsappClose = document.getElementById('whatsappClose');
+const whatsappWidget = document.querySelector('.whatsapp-widget');
+
+function openWhatsappPanel() {
+  whatsappPanel.hidden = false;
+  whatsappToggle.setAttribute('aria-expanded', 'true');
+}
+
+function closeWhatsappPanel() {
+  whatsappPanel.hidden = true;
+  whatsappToggle.setAttribute('aria-expanded', 'false');
+}
+
+whatsappToggle.addEventListener('click', () => {
+  if (whatsappPanel.hidden) {
+    openWhatsappPanel();
+  } else {
+    closeWhatsappPanel();
+  }
+});
+
+whatsappClose.addEventListener('click', () => {
+  closeWhatsappPanel();
+  whatsappToggle.focus();
+});
+
+document.addEventListener('click', (e) => {
+  if (!whatsappPanel.hidden && !whatsappWidget.contains(e.target)) {
+    closeWhatsappPanel();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !whatsappPanel.hidden) {
+    closeWhatsappPanel();
+    whatsappToggle.focus();
+  }
+});

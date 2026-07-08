@@ -20,3 +20,13 @@ Thumbs.db
 
 # Playwright MCP raw output (screenshots we keep are copied into assets/)
 .playwright-mcp/
+
+# Local Claude Code tooling (installed skills, lockfile) - not site content
+.agents/
+.claude/skills/
+skills-lock.json
+
+# Ad hoc test screenshots (keepers live in assets/)
+mobile-full.png
+mobile-full2.png
+mobile-hero.png
